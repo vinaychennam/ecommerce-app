@@ -7,7 +7,7 @@ export default function Home() {
 
   const { cart, setCart } = useContext(CartContext);
 
-  const addToCart = (product) => {
+  const addToCart = (product: any) => {
     setCart([...cart, product]);
   };
   return (
