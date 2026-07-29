@@ -1,181 +1,240 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import Link from "next/link";
 import { CartContext } from "./context/CartContext";
-export default function Home() {
 
-  const { cart, setCart } = useContext(CartContext);
+export default function Home() {
+  const { cart, setCart, wishlist, setWishlist } = useContext(CartContext);
+
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("All");
+
+  const products = [
+    {
+      name: "Dell Inspiron 15",
+      price: "$799",
+      description: "Intel i5 | 16GB RAM",
+      image: "/images/laptop.jpg",
+      rating: "⭐⭐⭐⭐☆",
+      discount: "20% OFF",
+      category: "Laptop",
+    },
+    {
+      name: "iPhone 15",
+      price: "$999",
+      description: "128GB Storage",
+      image: "/images/iphone.jpg",
+      rating: "⭐⭐⭐⭐⭐",
+      discount: "15% OFF",
+      category: "Mobile",
+    },
+    {
+      name: "Sony Headphones",
+      price: "$199",
+      description: "Noise Cancelling",
+      image: "/images/headphones.jpg",
+      rating: "⭐⭐⭐⭐☆",
+      discount: "30% OFF",
+      category: "Headphones",
+    },
+    {
+      name: "Apple Watch",
+      price: "$499",
+      description: "Series 10",
+      image: "/images/watch.jpg",
+      rating: "⭐⭐⭐⭐⭐",
+      discount: "10% OFF",
+      category: "Watch",
+    },
+  ];
 
   const addToCart = (product: any) => {
-    setCart([...cart, product]);
+    const existingProduct = cart.find(
+      (item: any) => item.name === product.name
+    );
+
+    if (existingProduct) {
+      const updatedCart = cart.map((item: any) =>
+        item.name === product.name
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+
+      setCart(updatedCart);
+    } else {
+      setCart([
+        ...cart,
+        {
+          ...product,
+          quantity: 1,
+        },
+      ]);
+    }
   };
+
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <main className="min-h-screen bg-gray-100">
 
-      {/* Navigation Bar */}
+      {/* Navbar */}
       <nav className="bg-black text-white p-4 flex justify-between items-center">
 
         <h1 className="text-2xl font-bold">
           Vinay Electronics Store
         </h1>
 
-        <ul className="flex gap-6">
+        <ul className="flex gap-6 items-center">
           <li>Home</li>
           <li>Products</li>
           <li>About</li>
           <li>
+            <Link href="/wishlist">
+              ❤️ ({wishlist.length})
+            </Link>
+          </li>
+
+          <li>
             <Link href="/cart">
-            Cart 🛒 ({cart.length})
-          </Link>
+              Cart 🛒 ({cart.length})
+            </Link>
           </li>
         </ul>
 
       </nav>
 
-      {/* Main Content */}
-
       <section className="p-10">
 
-        <h2 className="text-2xl font-bold mt-4 text-black">
+        <h2 className="text-3xl font-bold text-black">
           Welcome to Our Store
         </h2>
 
-        <p className="text-gray-800 mt-2">
+        <p className="text-gray-700 mt-2">
           We sell laptops, mobiles and accessories.
         </p>
 
-        <button className="mt-6 bg-green-600 text-white px-6 py-3 rounded-lg">
-          Browse Products
-        </button>
-        <div className="mt-10 grid grid-cols-4 gap-6">
+        {/* Search */}
 
-  {/* Product 1 */}
-  <div className="bg-white p-5 rounded-lg shadow-lg">
-    <div className="h-40 bg-gray-300 rounded-lg flex items-center justify-center">
-      💻 Laptop
+        <input
+          type="text"
+          placeholder="Search Products..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full border border-gray-400 rounded-lg p-3 mt-6 text-black bg-white placeholder-gray-500"
+        />
+        <div className="flex gap-3 mt-6 mb-6">
+
+      <button
+        onClick={() => setCategory("All")}
+        className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+      >
+        All
+      </button>
+
+      <button
+        onClick={() => setCategory("Laptop")}
+        className="bg-gray-700 text-white px-4 py-2 rounded-lg"
+      >
+        💻 Laptop
+      </button>
+
+      <button
+        onClick={() => setCategory("Mobile")}
+        className="bg-gray-700 text-white px-4 py-2 rounded-lg"
+      >
+        📱 Mobile
+      </button>
+
+      <button
+        onClick={() => setCategory("Headphones")}
+        className="bg-gray-700 text-white px-4 py-2 rounded-lg"
+      >
+        🎧 Headphones
+      </button>
+
+      <button
+        onClick={() => setCategory("Watch")}
+        className="bg-gray-700 text-white px-4 py-2 rounded-lg"
+      >
+        ⌚ Watch
+      </button>
+
     </div>
 
-    <h2 className="text-2xl font-bold mt-4 text-black">
-      Dell Inspiron 15
-    </h2>
+        {/* Products */}
 
-    <p className="text-gray-800 mt-2">
-      Intel i5 | 16GB RAM
-    </p>
+        <div className="grid grid-cols-4 gap-6 mt-10">
 
-    <p className="text-gray-800 mt-2">
-      $799
-    </p>
+          {filteredProducts.map((product, index) => (
 
-    <button
-  onClick={() =>
-  addToCart({
-    name: "Dell Inspiron 15",
-    price: "$799"
-  })
-}
-  className="mt-4 w-full bg-red-600 text-white py-2 rounded-lg"
->
-  Add to Cart
-</button>
-  </div>
+            <div
+              key={index}
+              className="bg-white rounded-lg shadow-lg p-5 flex flex-col"
+            >
+            <div className="bg-red-600 text-white text-sm font-semibold px-2 py-1 rounded w-fit mb-2">
+              {product.discount}
+            </div>
 
-  {/* Product 2 */}
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-48 object-cover rounded-lg"
+              />
 
-  <div className="bg-white p-5 rounded-lg shadow-lg">
-    <div className="h-40 bg-gray-300 rounded-lg flex items-center justify-center">
-      📱 Mobile
-    </div>
+              <h2 className="text-2xl font-bold mt-4 text-black">
+                {product.name}
+              </h2>
 
-    <h2 className="text-2xl font-bold mt-4 text-black">
-      iPhone 15
-    </h2>
+              <p className="text-gray-700 mt-2">
+                {product.description}
+              </p>
 
-    <p className="text-gray-800 mt-2">
-    128GB Storage
-    </p>
+              <p className="text-yellow-500 text-lg mt-2">
+                {product.rating}
+              </p>
 
-    <p className="text-gray-800 mt-2">
-      $999
-    </p>
 
-    <button
-  onClick={() =>
-    addToCart({
-      name: "iPhone 15",
-      price: "$999"
-    })
-  }
-  className="mt-4 w-full bg-red-600 text-white py-2 rounded-lg"
->
-  Add to Cart
-</button>
-  </div>
+              <p className="text-xl font-bold text-green-700 mt-2">
+                {product.price}
+              </p>
+              <button
+                onClick={() => {
+                  const exists = wishlist.find(
+                    (item: any) => item.name === product.name
+                  );
 
-  {/* Product 3 */}
+                  if (exists) {
+                    setWishlist(
+                      wishlist.filter(
+                        (item: any) => item.name !== product.name
+                      )
+                    );
+                  } else {
+                    setWishlist([...wishlist, product]);
+                  }
+                }}
+                className="mb-2 w-full bg-pink-500 hover:bg-pink-600 text-white py-2 rounded-lg"
+              >
+                {wishlist.find((item: any) => item.name === product.name)
+                  ? "❤️ Remove from Wishlist"
+                  : "🤍 Add to Wishlist"}
+              </button>
 
-  <div className="bg-white p-5 rounded-lg shadow-lg">
-    <div className="h-40 bg-gray-300 rounded-lg flex items-center justify-center">
-      🎧 Headphones
-    </div>
+              <button
+                onClick={() => addToCart(product)}
+                className="mt-4 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700"
+              >
+                Add to Cart
+              </button>
 
-    <h2 className="text-2xl font-bold mt-4 text-black">
-      Sony Headphones
-    </h2>
+            </div>
 
-    <p className="text-gray-800 mt-2">Noise Cancelling</p>
+          ))}
 
-    <p className="text-gray-800 mt-2">
-      $199
-    </p>
-
-    <button
-  onClick={() =>
-    addToCart({
-      name: "Sony Headphones",
-      price: "$199"
-    })
-  }
-  className="mt-4 w-full bg-red-600 text-white py-2 rounded-lg"
->
-  Add to Cart
-</button>
-  </div>
-
-  {/* Product 4 */}
-
-  <div className="bg-white p-5 rounded-lg shadow-lg">
-    <div className="h-40 bg-gray-300 rounded-lg flex items-center justify-center">
-      ⌚ Smart Watch
-    </div>
-
-    <h2 className="text-2xl font-bold mt-4 text-black">
-      Apple Watch
-    </h2>
-
-    <p className="text-gray-800 mt-2">
-      Series 10
-      </p>
-
-    <p className="text-gray-800 mt-2">
-      $499
-    </p>
-
-   <button
-  onClick={() =>
-    addToCart({
-      name: "Apple Watch",
-      price: "$499"
-    })
-  }
-  className="mt-4 w-full bg-red-600 text-white py-2 rounded-lg"
->
-  Add to Cart
-</button>
-  </div>
-
-</div>
+        </div>
 
       </section>
 
