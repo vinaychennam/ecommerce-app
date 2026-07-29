@@ -3,6 +3,7 @@
 import { useContext, useState } from "react";
 import Link from "next/link";
 import { CartContext } from "./context/CartContext";
+import { products } from "./data/products";
 
 export default function Home() {
   const { cart, setCart, wishlist, setWishlist } = useContext(CartContext);
@@ -10,44 +11,7 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
 
-  const products = [
-    {
-      name: "Dell Inspiron 15",
-      price: "$799",
-      description: "Intel i5 | 16GB RAM",
-      image: "/images/laptop.jpg",
-      rating: "⭐⭐⭐⭐☆",
-      discount: "20% OFF",
-      category: "Laptop",
-    },
-    {
-      name: "iPhone 15",
-      price: "$999",
-      description: "128GB Storage",
-      image: "/images/iphone.jpg",
-      rating: "⭐⭐⭐⭐⭐",
-      discount: "15% OFF",
-      category: "Mobile",
-    },
-    {
-      name: "Sony Headphones",
-      price: "$199",
-      description: "Noise Cancelling",
-      image: "/images/headphones.jpg",
-      rating: "⭐⭐⭐⭐☆",
-      discount: "30% OFF",
-      category: "Headphones",
-    },
-    {
-      name: "Apple Watch",
-      price: "$499",
-      description: "Series 10",
-      image: "/images/watch.jpg",
-      rating: "⭐⭐⭐⭐⭐",
-      discount: "10% OFF",
-      category: "Watch",
-    },
-  ];
+  
 
   const addToCart = (product: any) => {
     const existingProduct = cart.find(
@@ -73,38 +37,23 @@ export default function Home() {
     }
   };
 
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredProducts = products.filter((product) => {
+
+  const matchesSearch = product.name
+    .toLowerCase()
+    .includes(search.toLowerCase());
+
+
+  const matchesCategory =
+    category === "All" || product.category === category;
+
+
+  return matchesSearch && matchesCategory;
+
+});
 
   return (
     <main className="min-h-screen bg-gray-100">
-
-      {/* Navbar */}
-      <nav className="bg-black text-white p-4 flex justify-between items-center">
-
-        <h1 className="text-2xl font-bold">
-          Vinay Electronics Store
-        </h1>
-
-        <ul className="flex gap-6 items-center">
-          <li>Home</li>
-          <li>Products</li>
-          <li>About</li>
-          <li>
-            <Link href="/wishlist">
-              ❤️ ({wishlist.length})
-            </Link>
-          </li>
-
-          <li>
-            <Link href="/cart">
-              Cart 🛒 ({cart.length})
-            </Link>
-          </li>
-        </ul>
-
-      </nav>
 
       <section className="p-10">
 
@@ -178,11 +127,13 @@ export default function Home() {
               {product.discount}
             </div>
 
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-48 object-cover rounded-lg"
-              />
+          <Link href={`/product/${product.name}`}>
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-48 object-cover rounded-lg cursor-pointer"
+            />
+          </Link>
 
               <h2 className="text-2xl font-bold mt-4 text-black">
                 {product.name}

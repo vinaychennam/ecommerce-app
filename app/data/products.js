@@ -1,0 +1,38 @@
+export const products = [
+    {
+      name: "Dell Inspiron 15",
+      price: "$799",
+      description: "Intel i5 | 16GB RAM",
+      image: "/images/laptop.jpg",
+      rating: "⭐⭐⭐⭐☆",
+      discount: "20% OFF",
+      category: "Laptop",
+    },
+    {
+      name: "iPhone 15",
+      price: "$999",
+      description: "128GB Storage",
+      image: "/images/iphone.jpg",
+      rating: "⭐⭐⭐⭐⭐",
+      discount: "15% OFF",
+      category: "Mobile",
+    },
+    {
+      name: "Sony Headphones",
+      price: "$199",
+      description: "Noise Cancelling",
+      image: "/images/headphones.jpg",
+      rating: "⭐⭐⭐⭐☆",
+      discount: "30% OFF",
+      category: "Headphones",
+    },
+    {
+      name: "Apple Watch",
+      price: "$499",
+      description: "Series 10",
+      image: "/images/watch.jpg",
+      rating: "⭐⭐⭐⭐⭐",
+      discount: "10% OFF",
+      category: "Watch",
+    },
+  ];
