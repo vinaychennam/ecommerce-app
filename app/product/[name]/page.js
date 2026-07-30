@@ -56,7 +56,10 @@ const addToCart = (product) => {
         </p>
 
         <p className="text-yellow-500 text-xl mt-3">
-        {product.rating}
+          {product.rating}
+          <span className="text-gray-700 text-base ml-2">
+            ({product.reviews} Reviews)
+          </span>
         </p>
 
         <p className="bg-red-600 text-white inline-block px-3 py-1 rounded mt-3">

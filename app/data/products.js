@@ -5,8 +5,10 @@ export const products = [
       description: "Intel i5 | 16GB RAM",
       image: "/images/laptop.jpg",
       rating: "⭐⭐⭐⭐☆",
+      reviews: 245,
       discount: "20% OFF",
       category: "Laptop",
+      stock: 12,
     },
     {
       name: "iPhone 15",
@@ -14,8 +16,10 @@ export const products = [
       description: "128GB Storage",
       image: "/images/iphone.jpg",
       rating: "⭐⭐⭐⭐⭐",
+      reviews: 510,
       discount: "15% OFF",
       category: "Mobile",
+      stock: 4,
     },
     {
       name: "Sony Headphones",
@@ -23,8 +27,10 @@ export const products = [
       description: "Noise Cancelling",
       image: "/images/headphones.jpg",
       rating: "⭐⭐⭐⭐☆",
+      reviews: 124,
       discount: "30% OFF",
       category: "Headphones",
+      stock: 0,
     },
     {
       name: "Apple Watch",
@@ -32,7 +38,9 @@ export const products = [
       description: "Series 10",
       image: "/images/watch.jpg",
       rating: "⭐⭐⭐⭐⭐",
+      reviews: 112,
       discount: "10% OFF",
       category: "Watch",
+      stock: 8,
     },
   ];
