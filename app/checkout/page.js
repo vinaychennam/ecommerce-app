@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { CartContext } from "../context/CartContext";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -12,14 +12,37 @@ export default function Checkout() {
 
   const { cart, setCart } = useContext(CartContext);
 
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [checkingLogin, setCheckingLogin] = useState(true);
+
+    useEffect(() => {
+    const user = localStorage.getItem("loggedInUser");
+
+    if (!user) {
+      toast.error("Please login before checkout 🔐");
+      router.push("/login");
+      return;
+    }
+
+    const userData = JSON.parse(user);
+
+    setLoggedInUser(userData);
+
+    setName(userData.name || "");
+    setEmail(userData.email || "");
+
+    setCheckingLogin(false);
+  }, [router]);
+
 
   // Calculate total price
-  const totalAmount = cart.reduce(
+ const totalAmount = cart.reduce(
   (total, item) => {
     return (
       total +
-      Number(item.price.replace("$", "")) *
-      Number(item.quantity)
+      Number(
+        item.price.replace("₹", "").replace(",", "")
+      ) * Number(item.quantity)
     );
   },
   0
@@ -57,17 +80,50 @@ export default function Checkout() {
     }
 
 
-    toast.success("Order placed successfully 🎉");
+    const orderId = "VIN" + Date.now();
+
+const order = {
+  orderId,
+
+  customer: {
+    name,
+    email,
+    phone,
+    address,
+  },
+
+  products: cart,
+
+  totalAmount,
+
+  status: "Pending",
+
+  date: new Date().toLocaleDateString(),
+};
 
 
-    // Clear cart
-    setCart([]);
+localStorage.setItem(
+  "currentOrder",
+  JSON.stringify(order)
+);
 
 
-    // Navigate
-    router.push("/order-success");
+toast.success("Proceeding to Payment 💳");
+
+
+router.push("/payment");
 
   };
+
+    if (checkingLogin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-xl font-semibold">
+          Checking login...
+        </p>
+      </div>
+    );
+  }
 
 
 
@@ -119,7 +175,12 @@ export default function Checkout() {
 
 
                   <span className="text-black">
-                    ₹{Number(item.price) * Number(item.quantity)}
+                    ₹
+                    {(
+                      Number(
+                        item.price.replace("₹", "").replace(",", "")
+                      ) * Number(item.quantity)
+                    ).toLocaleString("en-IN")}
                   </span>
 
 
@@ -142,7 +203,7 @@ export default function Checkout() {
 
 
             <span>
-              ₹{totalAmount}
+              ₹{totalAmount.toLocaleString("en-IN")}
             </span>
 
           </div>

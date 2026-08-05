@@ -7,7 +7,14 @@ import { CartContext } from "./context/CartContext";
 import { products } from "./data/products";
 
 export default function Home() {
-  const { cart, setCart, wishlist, setWishlist } = useContext(CartContext);
+  const {
+  cart,
+  setCart,
+  wishlist,
+  setWishlist,
+  darkMode,
+  setDarkMode,
+} = useContext(CartContext);
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
@@ -74,17 +81,23 @@ export default function Home() {
     return 0;
   });
   return (
-    <main className="min-h-screen bg-slate-100">
+    <main
+  className={`min-h-screen transition-colors duration-300 ${
+    darkMode
+      ? "bg-gray-900 text-white"
+      : "bg-slate-100 text-black"
+  }`}
+>
       <section className="bg-[#0A192F] py-10">
   <div className="max-w-6xl mx-auto flex justify-between items-center">
 
     <div>
 
-      <h1 className="text-5xl font-bold">
+      <h1 className="text-5xl font-bold text-white">
         🔥 Big Sale - Up to 50% OFF
       </h1>
 
-      <p className="text-xl mt-6">
+      <p className="text-xl mt-6 text-gray-200">
         Upgrade your setup with the latest laptops,
         mobiles, watches and accessories.
       </p>
@@ -109,11 +122,19 @@ export default function Home() {
 
       <section id="products" className="p-10">
 
-        <h2 className="text-3xl font-bold text-black">
+        <h2
+          className={`text-3xl font-bold ${
+            darkMode ? "text-white" : "text-black"
+          }`}
+        >
           Welcome to Our Store
         </h2>
 
-        <p className="text-gray-700 mt-2">
+        <p 
+          className={`mt-2 ${
+            darkMode ? "text-gray-300" : "text-gray-700"
+          }`}
+        >
           We sell laptops, mobiles and accessories.
         </p>
 
@@ -179,7 +200,11 @@ export default function Home() {
     </div>
 
         {/* Products */}
-        <h2 className="text-4xl font-bold text-center text-black mt-10 mb-10">
+        <h2
+          className={`text-4xl font-bold text-center mt-10 mb-10 ${
+            darkMode ? "text-white" : "text-black"
+          }`}
+        >
           ⭐ Featured Products
         </h2>
 

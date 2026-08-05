@@ -8,6 +8,7 @@ export function CartProvider({ children }) {
 
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+  const [darkMode, setDarkMode] = useState(false);
 
   return (
     <CartContext.Provider
@@ -16,6 +17,8 @@ export function CartProvider({ children }) {
         setCart,
         wishlist,
         setWishlist,
+        darkMode,
+      setDarkMode,
       }}
     >
       {children}

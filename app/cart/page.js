@@ -4,12 +4,19 @@ import { useContext } from "react";
 import Link from "next/link";
 import { CartContext } from "../context/CartContext";
 
+
 export default function Cart() {
-  const { cart, setCart } = useContext(CartContext);
+  const { cart, setCart, darkMode } = useContext(CartContext);
   const totalPrice = cart.reduce((total, item) => {
-  return total + Number(item.price.replace("$", "")) * item.quantity;
+  return (
+    total +
+    Number(
+      item.price.replace("₹", "").replace(",", "")
+    ) * Number(item.quantity)
+  );
 }, 0);
 
+  
   const removeItem = (index) => {
     const updatedCart = cart.filter((_, i) => i !== index);
     setCart(updatedCart);
@@ -33,7 +40,13 @@ const decreaseQuantity = (index) => {
 };
 
   return (
-    <main className="min-h-screen bg-gray-100 p-10">
+    <main
+      className={`min-h-screen p-10 transition-colors duration-300 ${
+      darkMode
+      ? "bg-gray-900 text-white"
+      : "bg-gray-100 text-black"
+      }`}
+      >
 
       <h1 className="text-3xl font-bold text-black mb-6">
         My Cart 🛒
@@ -111,7 +124,7 @@ const decreaseQuantity = (index) => {
           <div className="mt-8 flex justify-between items-center">
 
   <h2 className="text-3xl font-bold text-black">
-    Total: ${totalPrice}
+  Total: ₹{totalPrice.toLocaleString("en-IN")}
   </h2>
 
   <div className="flex gap-4">
